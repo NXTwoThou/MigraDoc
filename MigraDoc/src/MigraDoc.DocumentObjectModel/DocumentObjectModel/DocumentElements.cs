@@ -176,6 +176,17 @@ namespace MigraDoc.DocumentObjectModel
         }
 
         /// <summary>
+        /// Adds a new Barcode to the collection.
+        /// </summary>
+        public Barcode AddBarcode(string code)
+        {
+            Barcode Barcode = new Barcode();
+            Barcode.Code = code;
+            Add(Barcode);
+            return Barcode;
+        }
+
+        /// <summary>
         /// Adds a new text frame to the collection.
         /// </summary>
         public TextFrame AddTextFrame()

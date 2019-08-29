@@ -858,14 +858,32 @@ namespace MigraDoc.Rendering
                 case "Image":
                     RenderImage((Image)docObj);
                     break;
-                //        default:
-                //          throw new NotImplementedException(typeName + " is coming soon...");
+
+                case "Barcode":
+                    RenderBarcode((Barcode)docObj);
+                    break;
+                    //        default:
+                    //          throw new NotImplementedException(typeName + " is coming soon...");
             }
         }
 
         void RenderImage(Image image)
         {
             RenderInfo renderInfo = CurrentImageRenderInfo;
+            XUnit top = CurrentBaselinePosition;
+            Area contentArea = renderInfo.LayoutInfo.ContentArea;
+            top -= contentArea.Height;
+            RenderByInfos(_currentXPosition, top, new RenderInfo[] { renderInfo });
+
+            RenderUnderline(contentArea.Width, true);
+            RealizeHyperlink(contentArea.Width);
+
+            _currentXPosition += contentArea.Width;
+        }
+
+        void RenderBarcode(Barcode Barcode)
+        {
+            RenderInfo renderInfo = CurrentBarcodeRenderInfo;
             XUnit top = CurrentBaselinePosition;
             Area contentArea = renderInfo.LayoutInfo.ContentArea;
             top -= contentArea.Height;
@@ -1486,6 +1504,7 @@ namespace MigraDoc.Rendering
                 StoreLineInformation();
 
             formatInfo.ImageRenderInfos = _imageRenderInfos;
+            formatInfo.BarcodeRenderInfos = _barcodeRenderInfos;
             FinishLayoutInfo();
         }
 
@@ -1607,6 +1626,9 @@ namespace MigraDoc.Rendering
                 case "Image":
                     return FormatImage((Image)docObj);
 
+                case "Barcode":
+                    return FormatBarcode((Barcode)docObj);
+
                 default:
                     return FormatResult.Continue;
             }
@@ -1621,6 +1643,20 @@ namespace MigraDoc.Rendering
         RenderInfo CalcImageRenderInfo(Image image)
         {
             Renderer renderer = Create(_gfx, _documentRenderer, image, _fieldInfos);
+            renderer.Format(new Rectangle(0, 0, double.MaxValue, double.MaxValue), null);
+
+            return renderer.RenderInfo;
+        }
+
+        FormatResult FormatBarcode(Barcode Barcode)
+        {
+            XUnit width = CurrentBarcodeRenderInfo.LayoutInfo.ContentArea.Width;
+            return FormatAsWord(width);
+        }
+
+        RenderInfo CalcBarcodeRenderInfo(Barcode Barcode)
+        {
+            Renderer renderer = Create(_gfx, _documentRenderer, Barcode, _fieldInfos);
             renderer.Format(new Rectangle(0, 0, double.MaxValue, double.MaxValue), null);
 
             return renderer.RenderInfo;
@@ -2533,6 +2569,29 @@ namespace MigraDoc.Rendering
                 return null;
             }
         }
+
+        RenderInfo CurrentBarcodeRenderInfo
+        {
+            get
+            {
+                if (_currentLeaf != null && _currentLeaf.Current is Barcode)
+                {
+                    Barcode barcode = (Barcode)_currentLeaf.Current;
+                    if (_barcodeRenderInfos != null && _barcodeRenderInfos.ContainsKey(barcode))
+                        return _barcodeRenderInfos[barcode];
+                    else
+                    {
+                        if (_barcodeRenderInfos == null)
+                            _barcodeRenderInfos = new Dictionary<Barcode, RenderInfo>();
+
+                        RenderInfo renderInfo = CalcBarcodeRenderInfo(barcode);
+                        _barcodeRenderInfos.Add(barcode, renderInfo);
+                        return renderInfo;
+                    }
+                }
+                return null;
+            }
+        }
         XPen GetUnderlinePen(bool isWord)
         {
             Font font = CurrentDomFont;
@@ -2599,6 +2658,7 @@ namespace MigraDoc.Rendering
         bool _reMeasureLine;
         XUnit _minWidth = 0;
         Dictionary<Image, RenderInfo> _imageRenderInfos;
+        Dictionary<Barcode, RenderInfo> _barcodeRenderInfos;
         List<TabOffset> _tabOffsets;
         DocumentObject _lastTab;
         bool _lastTabPassed;

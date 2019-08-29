@@ -377,6 +377,14 @@ namespace MigraDoc.DocumentObjectModel
         }
 
         /// <summary>
+        /// Adds a new Image object
+        /// </summary>
+        public Barcode AddBarcode(string code)
+        {
+            return Elements.AddBarcode(code);
+        }
+
+        /// <summary>
         /// Adds a new Bookmark
         /// </summary>
         public void Add(BookmarkField bookmark)

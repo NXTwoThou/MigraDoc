@@ -182,6 +182,7 @@ namespace MigraDoc.Rendering
         internal string ListSymbol;
         internal XFont ListFont;
         internal Dictionary<Image, RenderInfo> ImageRenderInfos;
+        internal Dictionary<Barcode, RenderInfo> BarcodeRenderInfos;
         readonly List<LineInfo> _lineInfos = new List<LineInfo>();
     }
 }

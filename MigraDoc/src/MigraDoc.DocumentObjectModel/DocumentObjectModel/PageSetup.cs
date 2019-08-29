@@ -330,7 +330,12 @@ namespace MigraDoc.DocumentObjectModel
         public PageFormat PageFormat
         {
             get { return (PageFormat)_pageFormat.Value; }
-            set { _pageFormat.Value = (int)value; }
+            set { _pageFormat.Value = (int)value;
+                if (!_pageFormat.IsNull 
+                    && _pageWidth.IsNull && _pageHeight.IsNull
+                    )
+                    PageSetup.GetPageSize((PageFormat)_pageFormat.Value, out _pageWidth, out _pageHeight);
+            }
         }
         [DV(Type = typeof(PageFormat))]
         internal NEnum _pageFormat = NEnum.NullValue(typeof(PageFormat));

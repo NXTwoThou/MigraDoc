@@ -125,6 +125,14 @@ namespace MigraDoc.DocumentObjectModel.Shapes
         }
 
         /// <summary>
+        /// Adds a new Barcode to the text frame.
+        /// </summary>
+        public Barcode AddBarcode(string _code)
+        {
+            return Elements.AddBarcode(_code);
+        }
+
+        /// <summary>
         /// Adds a new paragraph to the text frame.
         /// </summary>
         public void Add(Paragraph paragraph)

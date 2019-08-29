@@ -36,3 +36,13 @@ Azure servers do not require Medium Trust.
 
 I'm afraid that many users who never tried any beta version of PDFsharp 1.50 will now switch from version 1.32 stable to version 1.50 stable.  
 Nothing wrong about that. I hope we don't get an avalanche of bug reports now.
+
+# Changes by NXTwoThou 8/28/2019
+
+MigraDoc will now set PageWidth/PageHeight if they are Empty when PapeFormat is set.  See https://github.com/empira/MigraDoc/issues/26
+AddBarcode support to MIgraDoc based on the work presented https://forum.pdfsharp.net/viewtopic.php?t=1215
+PDFSharp can now use streams that are unable to seek(Like Response.Outputstream in asp.net)  https://github.com/empira/PDFsharp/issues/102
+PDFSharp now has PdfDocument.Options.EnableXmp.  When set false it won't export the XML metadata giving smaller file sizes to better compete with iTextSharp.
+
+
+

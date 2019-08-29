@@ -72,7 +72,12 @@ namespace MigraDoc.RtfRendering.Resources
       return FormatMessage(IDs.ImageTypeNotSupported, imageName);
     }
 
-    internal static string InvalidNumericFieldFormat(string format)
+    internal static string BarcodeNotSupported(string code)
+    {
+        return FormatMessage(IDs.BarcodeNotSupported, code);
+    }
+
+        internal static string InvalidNumericFieldFormat(string format)
     {
       return FormatMessage(IDs.InvalidNumericFieldFormat, format);
     }
@@ -100,7 +105,8 @@ namespace MigraDoc.RtfRendering.Resources
       ImageNotFound,
       ImageNotReadable,
       ImageTypeNotSupported,
-      CharacterNotAllowedInDateFormat
+      CharacterNotAllowedInDateFormat,
+      BarcodeNotSupported
     }
     // ReSharper restore InconsistentNaming
 
