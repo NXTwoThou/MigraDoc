@@ -486,12 +486,12 @@ namespace MigraDoc.Rendering
             if (!_table.Rows._leftIndent.IsNull)
                 layoutInfo.Left = _table.Rows.LeftIndent.Point;
 
-            else if (_table.Rows.Alignment == RowAlignment.Left)
+            /*else if (_table.Rows.Alignment == RowAlignment.Left)
             {
                 XUnit leftOffset = LeftBorderOffset;
                 leftOffset += _table.Columns[0].LeftPadding;
                 layoutInfo.Left = -leftOffset;
-            }
+            }*/
 
             switch (_table.Rows.Alignment)
             {
